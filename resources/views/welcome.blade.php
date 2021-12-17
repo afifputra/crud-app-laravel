@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Afif Putra Haryono
                 </div>
 
                 <div class="links">
