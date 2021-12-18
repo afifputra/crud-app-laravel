@@ -14,13 +14,16 @@ $(document).ready(function() {
         $('button#btn-tambah').text('Edit Data');
         $('#aksi').val("edit");
         let id = $(this).data("id");
-        let aksi = "getdata";
+        // let aksi = "getdata";
+        let token = $('meta[name="csrf-token"]').attr('content');
+        alert(token);
         $.ajax({
-            url: "functions.php",
+            url: "/home/edit",
             type: "POST",
             data: {
                 id: id,
-                aksi: aksi
+                _token: token
+                // aksi: aksi
             },
             dataType: "json",
             success: function(dataResult) {
@@ -35,21 +38,26 @@ $(document).ready(function() {
     });
     
     $("#dataKaryawan").on("click", ".hapus" ,function () {
+        let hapusModal = new bootstrap.Modal($('#hapusModal'));
+        hapusModal.show();
         let id = $(this).data("id");
-        let foto = $(this).data("img");
-        let aksi = "hapusdata";
+        let foto = $(this).data("foto");
+        let token = $('meta[name="csrf-token"]').attr('content');
+        // let aksi = "hapusdata";
         $.ajax({
-            url: "functions.php",
+            url: "/home/hapus",
             type: "POST",
             data: {
                 id: id,
                 foto: foto,
-                aksi: aksi
+                _token: token
             },
             dataType: "json",
             success: function(dataResult) {
                 if(dataResult.statusCode==200){
-                    $('#dataKaryawan').DataTable().ajax.reload();			
+                    alert(dataResult);
+                    // $('#dataKaryawan').DataTable().ajax.reload();
+                    window.location('/home');			
                 }
                 else if(dataResult.statusCode==201){
                     alert("Error occured !");

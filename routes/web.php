@@ -21,4 +21,8 @@ Route::get('/profile', function () {
 
 Route::get('/home', 'HomeController@tampilkanData');
 
-Route::post('/tambah', 'HomeController@tambahData');
+Route::post('/home/tambah', 'HomeController@tambahData');
+
+Route::post('/home/edit/', 'HomeController@getDataForEdit');
+
+Route::post('/home/hapus/', 'HomeController@hapusData');

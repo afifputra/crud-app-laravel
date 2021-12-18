@@ -4,6 +4,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
@@ -53,7 +54,14 @@
                                 <th>
                                    <img src="{{asset('img/'.$emp->foto)}}">
                                 </th>
-                                <th></th>
+                                <th>
+                                    <a id="edit" type="button" class="btn btn-sm btn-outline-primary edit" data-bs-target='#tambahModal' data-bs-toogle='modal' data-action="edit" data-id="{{$emp->id}}" data-placement="bottom">
+                                        Edit
+                                    </a>
+                                    <a id="hapus" type="button" class="btn btn-sm btn-outline-danger hapus" data-bs-target='#hapusModal' data-bs-toogle='modal' data-action="hapus" data-id="{{$emp->id}}" data-foto="{{$emp->foto}}">
+                                        Delete
+                                    </a>
+                                </th>
                             </tr>
                             @php
                                 $no++
@@ -66,7 +74,7 @@
             
             <!-- Modal Tambah Edit Data -->
             <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div id="success" class="alert alert-success alert-dismissible" style="display:none;">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
                     </div>
@@ -75,7 +83,7 @@
                             <h5 class="modal-title" id="textTambah">Tambah Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/tambah" method="post" enctype="multipart/form-data" id="formTambah">
+                        <form action="/home/tambah" method="post" enctype="multipart/form-data" id="formTambah">
                             {{csrf_field()}}
                             <div class="modal-body">
                                 <input type="hidden" name="id" id="id">
@@ -89,7 +97,7 @@
                                 <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 <label for="foto">Foto</label>
                                 <input id="foto" name="foto" type="file" class="form-control">
-                                <input type="hidden" name="aksi" id="aksi" value="">
+                                {{-- <input type="hidden" name="aksi" id="aksi" value=""> --}}
                                 <input type="hidden" name="foto-lama" id="foto-lama">
                             </div>
                             <div class="modal-footer">
@@ -100,9 +108,9 @@
                     </div>
                 </div>
             </div>
-
+            
             <!-- Modal Hapus -->
-            <!-- <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -122,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
         </div>
     </body>
@@ -130,6 +138,6 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <!-- <script src="script.js"></script> -->
-    <!-- <script src="/resources/js/datatables.js"></script> -->
+    <script src="{{asset('js/script.js')}}"></script> 
+    {{-- <script src="{{asset('js/datatables.js')}}"></script>  --}}
 </html>
