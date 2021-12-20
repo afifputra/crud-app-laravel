@@ -83,7 +83,7 @@
                             <h5 class="modal-title" id="textTambah">Tambah Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/home/tambah" method="post" enctype="multipart/form-data" id="formTambah">
+                        <form action="/home/manipulasidata" method="post" enctype="multipart/form-data" id="formTambah">
                             {{csrf_field()}}
                             <div class="modal-body">
                                 <input type="hidden" name="id" id="id">
@@ -97,8 +97,8 @@
                                 <input id="jabatan" name="jabatan" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 <label for="foto">Foto</label>
                                 <input id="foto" name="foto" type="file" class="form-control">
-                                {{-- <input type="hidden" name="aksi" id="aksi" value=""> --}}
-                                <input type="hidden" name="foto-lama" id="foto-lama">
+                                <input type="hidden" name="aksi" id="aksi" value="">
+                                <input type="hidden" name="fotolama" id="foto-lama">
                             </div>
                             <div class="modal-footer">
                                 <button type="close" name="close" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -119,14 +119,11 @@
                         </div>
                         <div class="modal-body">
                             <p>Apakah Anda Yakin untuk Menghapus Data ?</p>
-                            <form action="" method="post" id="hapusForm">
-                                <input type="hidden" name="id" id="id" value="">
-                                <input type="hidden" name="foto" id="foto" value="">
-                            </form>
+                            <input type="hidden" name="id" id="id" value="">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" name="submit" id="btn-hapus" class="btn btn-danger">Hapus</button>
+                            <button type="button" name="submit" id="btn-hapus" class="btn btn-danger">Hapus</button>
                         </div>
                     </div>
                 </div>

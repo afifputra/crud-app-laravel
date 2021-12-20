@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +23,8 @@ Route::get('/profile', function () {
 
 Route::get('/home', 'HomeController@tampilkanData');
 
-Route::post('/home/tambah', 'HomeController@tambahData');
+Route::post('/home/manipulasidata', 'HomeController@manipulasiData');
 
-Route::post('/home/edit/', 'HomeController@getDataForEdit');
+Route::post('/home/getdata', 'HomeController@getDataForEdit');
 
-Route::post('/home/hapus/', 'HomeController@hapusData');
+Route::post('/home/hapus', 'HomeController@hapusData');

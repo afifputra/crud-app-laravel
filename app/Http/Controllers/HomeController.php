@@ -16,50 +16,99 @@ class HomeController extends Controller
         return view('karyawan',['karyawan' => $employee]);
     }
 
-    public function tambahData(Request $request)
-    {
-
-        if($foto = $request->file('foto')){
-            $fotoExt = time().'.'.$foto->getClientOriginalExtension();
-            $request->foto->move(public_path('img'), $fotoExt);
-        }
-
-        DB::table('karyawan')->insert([
-            'id' => $request->id,
-            'nama' => $request->nama,
-            'tmptlahir' => $request->tmptlahir,
-            'tgllahir' => $request->tgllahir,
-            'jabatan' => $request->jabatan,
-            'foto' => $fotoExt
-        ]);
-        return redirect('/home');
-    }
-
     public function getDataForEdit(Request $request)
     {
         if($request->ajax()){
             $karyawan = DB::table('karyawan')->where('id', $request->id)->get();
-            return json_encode($karyawan);
+            return $karyawan;
         } 
         else{
             return "Don't have token";
         }
     }
 
+    public function manipulasiData(Request $request)
+    {
+        if ($request->ajax()) {
+
+            if($request->aksi === "tambah"){
+
+                if($foto = $request->file('foto')){
+                    $fotoNewName = time().'.'.$foto->getClientOriginalExtension();
+                    $request->foto->move(public_path('img'), $fotoNewName);
+                }
+        
+                $query = DB::table('karyawan')->insert([
+                    'id' => $request->id,
+                    'nama' => $request->nama,
+                    'tmptlahir' => $request->tmptlahir,
+                    'tgllahir' => $request->tgllahir,
+                    'jabatan' => $request->jabatan,
+                    'foto' => $fotoNewName
+                ]);
+        
+                if($query){
+                    return json_encode(array("statusCode" => 200));
+                } else {
+                    return json_encode(array("statusCode" => 201));
+                }
+            }
+
+            elseif($request->aksi === "edit"){
+
+                if ($request->file('foto') != null) {
+                    $image_path = "img/$request->fotolama";
+                    File::delete($image_path);
+                    $fotoNewName = time().'.'.$request->file('foto')->getClientOriginalExtension();
+                    $request->foto->move(public_path('img'), $fotoNewName);
+                    $query = DB::table('karyawan')->where('id', $request->id)->update([
+                        'nama' => $request->nama,
+                        'tmptlahir' => $request->tmptlahir,
+                        'tgllahir' => $request->tgllahir,
+                        'jabatan' => $request->jabatan,
+                        'foto' => $fotoNewName
+                    ]);
+                }
+                else {
+                    $query = DB::table('karyawan')->where('id', $request->id)->update([
+                        'nama' => $request->nama,
+                        'tmptlahir' => $request->tmptlahir,
+                        'tgllahir' => $request->tgllahir,
+                        'jabatan' => $request->jabatan,
+                        'foto' => $request->fotolama
+                    ]);
+                }
+
+                if($query){
+                    return json_encode(array("statusCode" => 200));
+                } else {
+                    return json_encode(array("statusCode" => 201));
+                }
+
+            }
+
+        } else {
+            return "Dont have token";
+        }
+        
+    }
+
     public function hapusData(Request $request)
     {
         if($request->ajax()){
-            $image_path = asset("img/$request->foto");
-            // return var_dump($image_path);
-            $result = $request;
-            // $result = DB::table('karyawan')->where('id', $request->id)->delete();
-            // if (File::exists($image_path)) {
-            //     File::delete($image_path);
-            // }
-            return json_encode($result);
+            $selectdata = DB::table('karyawan')->where('id', $request->id)->first();
+            $image_path = "img/$selectdata->foto";
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+                DB::table('karyawan')->where('id', $request->id)->delete();
+                return json_encode(array("statusCode" => 200));
+            }else {
+                DB::table('karyawan')->where('id', $request->id)->delete();
+                return json_encode(array("statusCode" => 201));
+            }
         }
         else {
-            return "Don't have token";
+            return "Dont have token";
         }
     }
 }

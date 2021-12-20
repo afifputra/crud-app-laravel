@@ -1,12 +1,15 @@
 $(document).ready(function() {
 
+
+    // Menampilkan Modal Tambah
     $("#tambah").click(function () {
         $('#textTambah').text('Tambah Data');
         $('#formTambah')[0].reset();
         $('button#btn-tambah').text('Tambah Data');
-        $('#aksi').val("insert");
+        $('#aksi').val("tambah");
     })
 
+    // Menampilkan Modal Edit
     $("#dataKaryawan").on("click", '.edit' ,function() {
         let myModal = new bootstrap.Modal($('#tambahModal'));
         myModal.show();
@@ -14,16 +17,13 @@ $(document).ready(function() {
         $('button#btn-tambah').text('Edit Data');
         $('#aksi').val("edit");
         let id = $(this).data("id");
-        // let aksi = "getdata";
         let token = $('meta[name="csrf-token"]').attr('content');
-        alert(token);
         $.ajax({
-            url: "/home/edit",
+            url: "/home/getdata",
             type: "POST",
             data: {
                 id: id,
                 _token: token
-                // aksi: aksi
             },
             dataType: "json",
             success: function(dataResult) {
@@ -36,62 +36,72 @@ $(document).ready(function() {
             }
         })
     });
-    
+
+    // Menampilkan Modal Hapus   
     $("#dataKaryawan").on("click", ".hapus" ,function () {
         let hapusModal = new bootstrap.Modal($('#hapusModal'));
         hapusModal.show();
         let id = $(this).data("id");
-        let foto = $(this).data("foto");
-        let token = $('meta[name="csrf-token"]').attr('content');
-        // let aksi = "hapusdata";
-        $.ajax({
-            url: "/home/hapus",
-            type: "POST",
-            data: {
-                id: id,
-                foto: foto,
-                _token: token
-            },
-            dataType: "json",
-            success: function(dataResult) {
-                if(dataResult.statusCode==200){
-                    alert(dataResult);
-                    // $('#dataKaryawan').DataTable().ajax.reload();
-                    window.location('/home');			
-                }
-                else if(dataResult.statusCode==201){
-                    alert("Error occured !");
-                }
-            }
-        })
+        id = $("#id").val(id);
     })
 
+    // Submit Form Tambah & Edit
     $('#formTambah').on('submit', function (e) {
 
         e.preventDefault();
         let form = new FormData(this);
 
+        $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+
         $.ajax({
-        type: 'post',
-        url: 'functions.php',
-        data: form,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (dataResult) {
-            console.log(dataResult);
-            if(dataResult.statusCode==200){
-                $("#success").show();
-				$('#success').html('Successfully !');
-                $('#dataKaryawan').DataTable().ajax.reload();
+            type: 'post',
+            url: '/home/manipulasidata',
+            data: form,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (dataResult) {
+                if(dataResult.statusCode==200){
+                    alert('Sukses');
+                }
+                else if(dataResult.statusCode==201){
+                    alert('Error');
+                }
             }
-            else if(dataResult.statusCode==201){
-                alert('Error');
-            }
-        }
         });
 
     });
+
+
+    // Submit Form Hapus
+    $('#btn-hapus').click(function () {
+        let id = $('#id').val();
+        let token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            type: 'post',
+            url: '/home/hapus',
+            data: {
+                id: id,
+                _token: token
+            },
+            dataType: 'json',
+            success: function (dataResult) {
+                console.log(dataResult[0]);
+                if(dataResult.statusCode==200){
+                    alert('Sukses');
+                }
+                else if(dataResult.statusCode==201){
+                    alert('Error');
+                }
+            }
+        });
+
+    })
+
 
     // $('#btn-tambah').on('click', function() {
     // $("#btn-tambah").attr("disabled", "disabled");
