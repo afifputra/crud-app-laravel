@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
-                <div class="col-10">
+                <div class="col">
                     <table id="dataKaryawan" class="table">
                         <thead>
                             <tr>
@@ -42,31 +42,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @php 
-                                $no=1
-                            @endphp
-                            @foreach($karyawan as $emp)
-                            <tr>
-                                <th>{{$no}}</th>
-                                <th>{{$emp->nama}}</th>
-                                <th>{{$emp->tmptlahir}},  {{date('d F Y',strtotime($emp->tgllahir))}}</th>
-                                <th>{{$emp->jabatan}}</th>
-                                <th>
-                                   <img src="{{asset('img/'.$emp->foto)}}">
-                                </th>
-                                <th>
-                                    <a id="edit" type="button" class="btn btn-sm btn-outline-primary edit" data-bs-target='#tambahModal' data-bs-toogle='modal' data-action="edit" data-id="{{$emp->id}}" data-placement="bottom">
-                                        Edit
-                                    </a>
-                                    <a id="hapus" type="button" class="btn btn-sm btn-outline-danger hapus" data-bs-target='#hapusModal' data-bs-toogle='modal' data-action="hapus" data-id="{{$emp->id}}" data-foto="{{$emp->foto}}">
-                                        Delete
-                                    </a>
-                                </th>
-                            </tr>
-                            @php
-                                $no++
-                            @endphp
-                        @endforeach
+                            
                         </tbody>
                     </table>
                 </div>
@@ -114,7 +90,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">

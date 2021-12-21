@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Karyawan_controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,18 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/profile', function () {
-    return view('profile');
-});
+// Route::get('/profile', function () {
+//     return view('profile');
+// });
 
-Route::get('/home', 'HomeController@tampilkanData');
+Route::get('/','Karyawan_controller@index');
 
-Route::post('/home/manipulasidata', 'HomeController@manipulasiData');
+Route::get('/yajra','Karyawan_controller@yajra');
 
-Route::post('/home/getdata', 'HomeController@getDataForEdit');
+Route::post('/getdata', 'Karyawan_controller@getDataForEdit');
 
-Route::post('/home/hapus', 'HomeController@hapusData');
+Route::post('/manipulasidata', 'Karyawan_controller@manipulasiData');
+
+Route::post('/hapus', 'Karyawan_controller@hapusData');

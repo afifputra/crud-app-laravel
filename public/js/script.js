@@ -1,5 +1,21 @@
-$(document).ready(function() {
-
+    $(document).ready(function() {
+        $('#dataKaryawan').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "./yajra",
+        columns: [
+            {data: 'no', name: 'no'},
+            {data: 'nama', name: 'nama'},
+            {data: 'tmptlahir', name: 'tmptlahir'},
+            // {data: 'tgllahir', name: 'tgllahir'},
+            {data: 'jabatan', name: 'jabatan'},
+            {data: 'foto', name: 'foto'},
+            {data: 'action', name: 'action'}
+        ]
+        });
+    
+    let myModal = new bootstrap.Modal($('#tambahModal'));
+    let hapusModal = new bootstrap.Modal($('#hapusModal'));
 
     // Menampilkan Modal Tambah
     $("#tambah").click(function () {
@@ -11,7 +27,6 @@ $(document).ready(function() {
 
     // Menampilkan Modal Edit
     $("#dataKaryawan").on("click", '.edit' ,function() {
-        let myModal = new bootstrap.Modal($('#tambahModal'));
         myModal.show();
         $('#textTambah').text('Edit Data');
         $('button#btn-tambah').text('Edit Data');
@@ -19,7 +34,7 @@ $(document).ready(function() {
         let id = $(this).data("id");
         let token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: "/home/getdata",
+            url: "/getdata",
             type: "POST",
             data: {
                 id: id,
@@ -39,7 +54,6 @@ $(document).ready(function() {
 
     // Menampilkan Modal Hapus   
     $("#dataKaryawan").on("click", ".hapus" ,function () {
-        let hapusModal = new bootstrap.Modal($('#hapusModal'));
         hapusModal.show();
         let id = $(this).data("id");
         id = $("#id").val(id);
@@ -59,7 +73,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'post',
-            url: '/home/manipulasidata',
+            url: '/manipulasidata',
             data: form,
             dataType: 'json',
             processData: false,
@@ -67,6 +81,8 @@ $(document).ready(function() {
             success: function (dataResult) {
                 if(dataResult.statusCode==200){
                     alert('Sukses');
+                    $('#dataKaryawan').DataTable().ajax.reload();
+                    myModal.hide();
                 }
                 else if(dataResult.statusCode==201){
                     alert('Error');
@@ -83,7 +99,7 @@ $(document).ready(function() {
         let token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             type: 'post',
-            url: '/home/hapus',
+            url: '/hapus',
             data: {
                 id: id,
                 _token: token
@@ -93,6 +109,8 @@ $(document).ready(function() {
                 console.log(dataResult[0]);
                 if(dataResult.statusCode==200){
                     alert('Sukses');
+                    $('#dataKaryawan').DataTable().ajax.reload();
+                    hapusModal.hide();
                 }
                 else if(dataResult.statusCode==201){
                     alert('Error');
@@ -101,49 +119,5 @@ $(document).ready(function() {
         });
 
     })
-
-
-    // $('#btn-tambah').on('click', function() {
-    // $("#btn-tambah").attr("disabled", "disabled");
-    // let id = $("#id").val();
-    // let nama = $("#nama").val();
-    // let tmptlahir = $("#tmptlahir").val();
-    // let tgllahir = $("#tgllahir").val();
-    // let jabatan = $("#jabatan").val();
-    // let foto = $("#foto").val();
-    // let aksi = $("#aksi").val();
-    // if(nama!="" && tmptlahir!="" && tgllahir!="" && jabatan!="" && foto!="" && aksi!=""){
-    //     $.ajax({
-    //         url: "functions.php",
-    //         type: "POST",
-    //         data: {
-    //             id: id,
-    //             nama: nama,
-    //             tmptlahir: tmptlahir,
-    //             tgllahir: tgllahir,
-    //             jabatan: jabatan,
-    //             foto: foto,
-    //             aksi: aksi				
-    //         },
-    //         dataType: "json",
-    //         cache: false,
-    //         success: function(dataResult){
-    //             if(dataResult.statusCode==200){
-    //                 $("#btn-tambah").removeAttr("disabled");
-    //                 $('#formTambah').find('input:text').val('');
-    //                 $("#success").show();
-    //                 $('#success').html('Data added successfully !'); 						
-    //             }
-    //             else if(dataResult.statusCode==201){
-    //                 alert("Error occured !");
-    //             }
-                
-    //         }
-    //     });
-    // }
-    // else{
-    //     alert('Please fill all the field !');
-    // }
-    // });
 
 });
